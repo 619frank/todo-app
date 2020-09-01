@@ -1,8 +1,7 @@
 from rest_framework import serializers
-from todo.models import Todo
+from todo.models.Todo import Todo
 
 class TodoSerializer(serializers.ModelSerializer):
-
     class Meta:
         model = Todo
-        fields = ('id', 'bucket', 'user_id', 'message', 'created')
+        fields = ('bucket', 'user_id', 'message', 'created')

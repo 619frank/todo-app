@@ -1,7 +1,7 @@
 from django.http import HttpResponse
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from todo.models import Todo
+from todo.models.Todo import Todo
 from todo.serializers import TodoSerializer
 from rest_framework import status
 
@@ -12,6 +12,7 @@ def todo_collection(request):
         todos = Todo.objects.all()
         serializer = TodoSerializer(todos, many=True)
         return Response(serializer.data)
+
     elif request.method == 'POST':
         data = {'bucket': request.DATA.get('bucket'), 'message': request.user.pk, 'user_id': 1}
         serializer = TodoSerializer(data=data)
