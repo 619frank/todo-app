@@ -14,7 +14,7 @@ def todo_collection(request):
         buckets = Todo.objects.all()
         todos = []
         for todo in buckets:
-            todos.append({'bucket_name': todo.bucket.bucket, 'message': todo.message, 'done': todo.done, 'created': todo.created})
+            todos.append({'id':todo.id,'bucket_name': todo.bucket.bucket, 'message': todo.message, 'done': todo.done, 'created': todo.created})
         return Response(todos)
 
 @api_view(['POST'])
@@ -27,20 +27,29 @@ def create_todo(request):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-@api_view(['GET', 'DELETE'])
-def todo_element(request, id):
-    try:
-        todo = Todo.objects.get(id=id)
-    except Todo.DoesNotExist:
-        return HttpResponse(status=404)
+@api_view(['PUT'])
+def mark_todo(request):
+    if request.method == 'PUT':
+        todo = Todo.objects.get(id = request.data.get('id'))
+        todo.done = request.data.get('done')
+        # print(request.data.get('done'))
+        todo.save()
+        return Response('success', status=status.HTTP_204_NO_CONTENT)        
 
-    if request.method == 'GET':
-        serializer = TodoSerializer(todo)
-        return Response(serializer.data)
+# @api_view(['GET', 'DELETE'])
+# def todo_element(request, id):
+#     try:
+#         todo = Todo.objects.get(id=id)
+#     except Todo.DoesNotExist:
+#         return HttpResponse(status=404)
 
-    elif request.method == 'DELETE':
-        todo.delete()
-        return Response(status=status.HTTP_204_NO_CONTENT)
+#     if request.method == 'GET':
+#         serializer = TodoSerializer(todo)
+#         return Response(serializer.data)
+
+#     elif request.method == 'DELETE':
+#         todo.delete()
+#         return Response(status=status.HTTP_204_NO_CONTENT)
 
 @api_view(['GET'])
 def buckets(request):

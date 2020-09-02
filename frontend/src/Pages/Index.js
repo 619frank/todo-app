@@ -6,17 +6,20 @@ import { useDispatch } from "react-redux";
 import backendConfig from '../backendConfig'
 
 const Index = () => {
+  const dispatch = useDispatch()
+
   useEffect(() => {
     let func = async () => {
       try {        
         let response = await axios.get(`${backendConfig.baseUrl}/api/todos/`);
-        console.log(response)
+        dispatch({ type: "setTodos", payload: { todos: response.data } });
       } catch (error) {
         console.log(error)
       }
     }
     func()
   },[])
+
   return (
     <Router>
       <div>
