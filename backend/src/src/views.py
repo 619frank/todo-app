@@ -17,7 +17,7 @@ def todo_collection(request):
 @api_view(['POST'])
 def create_todo(request):
     if request.method == 'POST':
-        data = {'bucket': request.DATA.get('bucket'), 'message': request.user.pk, 'user_id': 1}
+        data = {'bucket': request.data.get('bucket'), 'message': request.data.get('message'), 'user_id': 1}
         serializer = TodoSerializer(data=data)
         if serializer.is_valid():
             serializer.save()
@@ -46,11 +46,10 @@ def buckets(request):
         serializer = BucketSerializer(buckets, many=True)
         return Response(serializer.data)
 
-
 @api_view(['POST'])
 def create_bucket(request):
     if request.method == 'POST':
-        data = {'bucket': request.DATA.get('bucket')}
+        data = {'id': 2, 'bucket': request.data.get('bucket')}
         serializer = BucketSerializer(data=data)
         if serializer.is_valid():
             serializer.save()
