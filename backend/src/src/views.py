@@ -6,13 +6,16 @@ from todo.serializers import TodoSerializer
 from todo.models.Todo import Bucket
 from todo.serializers import BucketSerializer
 from rest_framework import status
+import json 
 
 @api_view(['GET'])
 def todo_collection(request):
     if request.method == 'GET':
-        todos = Todo.objects.all()
-        serializer = TodoSerializer(todos, many=True)
-        return Response(serializer.data)
+        buckets = Todo.objects.all()
+        todos = []
+        for todo in buckets:
+            todos.append({'bucket_name': todo.bucket.bucket, 'message': todo.message, 'done': todo.done, 'created': todo.created})
+        return Response(todos)
 
 @api_view(['POST'])
 def create_todo(request):

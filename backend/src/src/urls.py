@@ -19,7 +19,7 @@ from src import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('api/todos/', views.todo_collection, name="get todos and post todo"),    
+    path('api/todos/', views.todo_collection, name="get todos with Buckets"),    
     path('api/create_todo/', views.create_todo, name="post todo"),   
     path('api/todos/<int:id>/', views.todo_element, name="get todo and delete todo"),
     path('api/buckets/', views.buckets, name="get buckets"),

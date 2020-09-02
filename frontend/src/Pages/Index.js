@@ -1,8 +1,22 @@
-import React from 'react'
+import React,{useEffect} from 'react'
 import Todo from './Todo/Todo'
 import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
+import axios from 'axios'
+import { useDispatch } from "react-redux";
+import backendConfig from '../backendConfig'
 
 const Index = () => {
+  useEffect(() => {
+    let func = async () => {
+      try {        
+        let response = await axios.get(`${backendConfig.baseUrl}/api/todos/`);
+        console.log(response)
+      } catch (error) {
+        console.log(error)
+      }
+    }
+    func()
+  },[])
   return (
     <Router>
       <div>

@@ -11,3 +11,10 @@ class BucketSerializer(serializers.ModelSerializer):
     class Meta:
         model = Bucket
         fields = ['bucket']    
+
+# class BucketWithTodosSerializer(serializers.ModelSerializer):
+#     todos = serializers.StringRelatedField(many=True)
+
+#     class Meta:
+#         model = Bucket
+#         fields = ['album_name', 'artist', 'tracks']        
