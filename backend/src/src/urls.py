@@ -22,10 +22,9 @@ urlpatterns = [
     path('api/todos/', views.todo_collection, name="get todos with Buckets"),    
     path('api/create_todo/', views.create_todo, name="post todo"),   
     path('api/mark_todo/', views.mark_todo, name="mark todo"),       
-    # path('api/update_todo/', views.api/update_todo/, name="update_todo"),       
-    # path('api/delete_todo/', views.api/delete_todo/, name="delete_todo"),       
+    path('api/update_todo/', views.update_todo, name="update_todo"),       
+    path('api/delete_todo/<int:id>', views.delete_todo, name="delete_todo"),       
 
-    # path('api/todos/<int:id>/', views.todo_element, name="get todo and delete todo"),
     path('api/buckets/', views.buckets, name="get buckets"),
     path('api/create_bucket/', views.create_bucket, name="create_bucket buckets")
 ]

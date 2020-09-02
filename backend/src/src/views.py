@@ -34,22 +34,28 @@ def mark_todo(request):
         todo.done = request.data.get('done')
         # print(request.data.get('done'))
         todo.save()
-        return Response('success', status=status.HTTP_204_NO_CONTENT)        
+        return Response('success', status=status.HTTP_204_NO_CONTENT)
 
-# @api_view(['GET', 'DELETE'])
-# def todo_element(request, id):
-#     try:
-#         todo = Todo.objects.get(id=id)
-#     except Todo.DoesNotExist:
-#         return HttpResponse(status=404)
+@api_view(['PUT'])
+def update_todo(request):
+    if request.method == 'PUT':
+        todo = Todo.objects.get(id = request.data.get('id'))
+        todo.message = request.data.get('message')
+        todo.save()
+        # print(request.data.get('id'))
+        return Response('success', status=status.HTTP_204_NO_CONTENT)
+                
 
-#     if request.method == 'GET':
-#         serializer = TodoSerializer(todo)
-#         return Response(serializer.data)
+@api_view(['GET', 'DELETE'])
+def delete_todo(request, id):
+    try:
+        todo = Todo.objects.get(id=id)
+    except Todo.DoesNotExist:
+        return HttpResponse(status=404)
 
-#     elif request.method == 'DELETE':
-#         todo.delete()
-#         return Response(status=status.HTTP_204_NO_CONTENT)
+    if request.method == 'DELETE':
+        todo.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
 
 @api_view(['GET'])
 def buckets(request):
