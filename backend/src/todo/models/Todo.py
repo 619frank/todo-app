@@ -8,4 +8,5 @@ class Todo(models.Model):
     user_id = models.IntegerField()
     bucket_id = models.ForeignKey(Bucket, on_delete=models.CASCADE)
     message = models.CharField(max_length=100)
+    done = models.BooleanField()
     created = models.DateField()

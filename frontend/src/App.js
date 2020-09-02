@@ -1,26 +1,22 @@
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import "bootstrap/dist/css/bootstrap.min.css";
+import { Provider } from "react-redux";
+import { createStore, combineReducers } from "redux";
+import TodoReducer from './redux/reducers/TodoReducer'
+import Index from './Pages/Index'
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+const rootReducer = combineReducers({
+  TodoReducer
+});
+
+const store = createStore(rootReducer);
+
+const App = () => {
+  return(
+    <Provider store={store}>
+      <Index/>
+    </Provider>
+  )
 }
 
 export default App;

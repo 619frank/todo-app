@@ -7,14 +7,16 @@ from todo.models.Todo import Bucket
 from todo.serializers import BucketSerializer
 from rest_framework import status
 
-@api_view(['GET', 'POST'])
+@api_view(['GET'])
 def todo_collection(request):
     if request.method == 'GET':
         todos = Todo.objects.all()
         serializer = TodoSerializer(todos, many=True)
         return Response(serializer.data)
 
-    elif request.method == 'POST':
+@api_view(['POST'])
+def create_todo(request):
+    if request.method == 'POST':
         data = {'bucket': request.DATA.get('bucket'), 'message': request.user.pk, 'user_id': 1}
         serializer = TodoSerializer(data=data)
         if serializer.is_valid():
