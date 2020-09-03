@@ -7,6 +7,9 @@ from todo.models.Todo import Bucket
 from todo.serializers import BucketSerializer
 from rest_framework import status
 import json 
+import time
+import datetime
+
 
 @api_view(['GET'])
 def todo_collection(request):
@@ -20,7 +23,9 @@ def todo_collection(request):
 @api_view(['POST'])
 def create_todo(request):
     if request.method == 'POST':
-        data = {'bucket': request.data.get('bucket'), 'message': request.data.get('message'), 'user_id': 1}
+        ts = time.time()
+        timestamp = datetime.datetime.fromtimestamp(ts).strftime('%Y-%m-%d')
+        data = {'id':1,'user_id': 1, 'bucket': 1, 'message': request.data.get('message'), 'done': 0, 'created': timestamp }
         serializer = TodoSerializer(data=data)
         if serializer.is_valid():
             serializer.save()

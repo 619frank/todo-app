@@ -1,7 +1,11 @@
-import React,{useState} from 'react'
+import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import axios from "axios";
 import backendConfig from '../../../backendConfig'
+import DropdownButton from "react-bootstrap/DropdownButton";
+import Dropdown from "react-bootstrap/Dropdown";
+// import MenuItem from "react-bootstrap/MenuItem";
+
 
 const ListBucketsAndTodos = () => {
   const dispatch = useDispatch()
@@ -10,7 +14,20 @@ const ListBucketsAndTodos = () => {
     id: null,
     message: "message",
   });
+  const [buckets, setBuckets] = useState([])
+  const [newTodoData, setNewTodoData] = useState({message: '', bucket_id: 1,})
 
+  useEffect(() => {
+    let func = async () => {
+      try {
+        let response = await axios.get(`${backendConfig.baseUrl}/api/buckets/`);
+        setBuckets(response.data)
+      } catch (error) {
+        console.log(error)  
+      }      
+    }    
+    func()
+  },[])
   const handleTodoDone = async (e) => {
     let id = e.target.getAttribute("data-idval");
     let done = e.target.checked;
@@ -77,11 +94,63 @@ const ListBucketsAndTodos = () => {
     }
   }
 
+  const handleDeleteTodo = async (e) => {
+    let id = e.target.getAttribute("data-idval");
+    try {
+      let response = await axios.delete(`${backendConfig.baseUrl}/api/delete_todo/${id}/`);
+      let newTodos = todos.filter((todo) => {
+        if (todo.id == id) {
+          return false;
+        }
+        return true;
+      });
+      dispatch({ type: "setTodos", payload: { todos: newTodos } });   
+    } catch (error) {
+     console.log(error) 
+    }
+
+  }
+
+  const createTaskHandler = async () => {
+    try {
+      let response = await axios.post(
+        `${backendConfig.baseUrl}/api/create_todo/`,
+        {
+          bucket_id: newTodoData.bucket_id,
+          message: newTodoData.message
+        }
+      );
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
   return (
     <div className="container">
       <div className="row align-item-start">
         <div className="col">
           <ul className="list-group">
+            <li className="list-group-item">
+              <select
+                onChange={(e) => {
+                  setNewTodoData({...newTodoData})
+                }}
+              >
+                {buckets.length
+                  ? buckets.map((bucket, index) => (
+                      <option
+                        key={index}
+                        // data-idvalue={bucket.id}
+                        value={bucket.id}
+                      >
+                        {bucket.bucket}
+                      </option>
+                    ))
+                  : ""}
+              </select>
+              <input value={newTodoData.message} onChange={(e) => setNewTodoData({...newTodoData, message:e.target.value})}/>
+              <button onClick={createTaskHandler}>Add Task</button>
+            </li>
             {todos.length
               ? todos.map((todo, index) => (
                   <li key={index} className="list-group-item">
@@ -93,7 +162,10 @@ const ListBucketsAndTodos = () => {
                         </span>
                       </div>
                       <div className="col">
-                        <form className="form-inline" onSubmit={updateTodoHandler}>
+                        <form
+                          className="form-inline"
+                          onSubmit={updateTodoHandler}
+                        >
                           <div className="form-group">
                             <input
                               name="message"
@@ -136,6 +208,7 @@ const ListBucketsAndTodos = () => {
                         <button
                           className="btn btn-sm btn-danger"
                           data-idval={todo.id}
+                          onClick={handleDeleteTodo}
                         >
                           Delete
                         </button>
